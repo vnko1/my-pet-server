@@ -1,5 +1,5 @@
 import { Body, Controller, Param, Post, Query } from '@nestjs/common';
-import { TestDto } from 'src/dto';
+import { TestDto } from '../dto/test.dto';
 
 @Controller('articles')
 export class TestController {
