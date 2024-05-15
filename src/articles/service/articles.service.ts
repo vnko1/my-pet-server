@@ -10,6 +10,7 @@ import { ArticlesQueryDto } from '../dto/articles-query.dto';
 @Injectable()
 export class ArticlesService extends DB {
   limit = 6;
+
   constructor(@InjectModel(Article.name) private articleModel: Model<Article>) {
     super();
   }
