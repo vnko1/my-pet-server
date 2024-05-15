@@ -1,4 +1,4 @@
-export class ArticlesDto {
+export class TestDto {
   name: string;
   age: number;
   breed: string;
