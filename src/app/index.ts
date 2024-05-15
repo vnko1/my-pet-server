@@ -1,2 +1,1 @@
-export * from './controller/app.controller';
-export * from './service/app.service';
+export * from './module/app.module';
