@@ -15,16 +15,21 @@ export class ArticlesService extends DB {
     super();
   }
 
-  findAll(query: ArticlesQueryDto): Promise<Article[]> {
+  async findAll(
+    query: ArticlesQueryDto,
+  ): Promise<{ data: Article[]; total: number }> {
     const queryPattern = this.getSearchQueryPattern(query.query);
     const sortPattern = this.getSortingPattern('date');
     const perPage = this.getSkipPattern(query.page, this.limit);
-
-    return this.articleModel
+    const data = await this.articleModel
       .find(queryPattern, '-id')
       .skip(perPage)
       .limit(this.limit)
       .sort(sortPattern)
       .exec();
+
+    const total = await this.articleModel.countDocuments(queryPattern);
+
+    return { total, data };
   }
 }
