@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
-import { User } from 'src/users/schema/users.schema';
+import { User } from 'src/modules/users/schema/users.schema';
 
 export type NoticeDocument = mongoose.HydratedDocument<Notice>;
 
