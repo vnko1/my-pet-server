@@ -1,5 +1,18 @@
+import * as bcrypt from 'bcrypt';
+
 export abstract class AppService {
   protected page = 1;
+  protected saltOrRounds = 10;
+
+  constructor() {}
+
+  protected async hashPassword(password: string) {
+    return await bcrypt.hash(password, this.saltOrRounds);
+  }
+
+  protected async checkPassword(password: string, hash: string) {
+    return await bcrypt.compare(password, hash);
+  }
 
   protected getSearchQueryPattern(query?: string) {
     return query
