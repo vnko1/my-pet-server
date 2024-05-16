@@ -36,10 +36,10 @@ export class Notice {
   @Prop({ min: 1 })
   price: number;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   favorites: User[];
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   owner: User;
 }
 

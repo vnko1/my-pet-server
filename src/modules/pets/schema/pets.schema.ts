@@ -21,7 +21,7 @@ export class Pet {
   @Prop({ required: true, maxlength: 120, default: '' })
   comments: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   owner: User;
 }
 

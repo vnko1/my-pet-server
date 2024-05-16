@@ -2,11 +2,13 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { ArticlesModule } from './articles/articles.module';
-import { SponsorsModule } from './sponsors/sponsors.module';
-import { UsersModule } from './users/users.module';
-import { PetsModule } from './pets/pets.module';
-import { NoticesModule } from './notices/notices.module';
+import {
+  ArticlesModule,
+  NoticesModule,
+  PetsModule,
+  SponsorsModule,
+  UsersModule,
+} from './modules';
 
 @Module({
   imports: [
