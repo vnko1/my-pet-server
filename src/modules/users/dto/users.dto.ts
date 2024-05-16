@@ -1,5 +1,12 @@
-export class CreateUserDto {
-  name: string;
-  email: string;
-  password: string;
-}
+import { emailRegex, passwordRegex } from 'src/utils';
+import { z } from 'zod';
+
+export const createUserSchema = z
+  .object({
+    name: z.string().min(2).max(15),
+    email: z.string().email().regex(emailRegex),
+    password: z.string().regex(passwordRegex).min(6).max(16),
+  })
+  .required();
+
+export type CreateUserDto = z.infer<typeof createUserSchema>;

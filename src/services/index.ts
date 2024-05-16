@@ -1,4 +1,4 @@
-export abstract class DB {
+export abstract class AppService {
   protected page = 1;
 
   protected getSearchQueryPattern(query?: string) {

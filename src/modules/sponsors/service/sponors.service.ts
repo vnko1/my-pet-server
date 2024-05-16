@@ -2,11 +2,11 @@ import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { DB } from 'src/services/db.service';
+import { AppService } from 'src/services';
 import { Sponsor } from '../schema/sponsor.schema';
 
 @Injectable()
-export class SponsorsService extends DB {
+export class SponsorsService extends AppService {
   constructor(@InjectModel(Sponsor.name) private sponsorModel: Model<Sponsor>) {
     super();
   }

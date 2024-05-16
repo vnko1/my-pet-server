@@ -2,13 +2,13 @@ import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { DB } from 'src/services/db.service';
+import { AppService } from 'src/services';
 
 import { Article } from '../schema/articles.schema';
 import { ArticlesQueryDto } from '../dto/articles-query.dto';
 
 @Injectable()
-export class ArticlesService extends DB {
+export class ArticlesService extends AppService {
   limit = 6;
 
   constructor(@InjectModel(Article.name) private articleModel: Model<Article>) {
