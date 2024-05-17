@@ -25,10 +25,9 @@ export class AuthGuard implements CanActivate {
         secret: process.env.JWT_SECRET,
       });
 
-      const user = this.userService.findUserById(payload.sub);
-      console.log('🚀 ~ AuthGuard ~ canActivate ~ user:', user);
+      const user = await this.userService.findUserById(payload.sub);
 
-      request['user'] = payload;
+      request['user'] = user;
     } catch {
       throw new UnauthorizedException();
     }
