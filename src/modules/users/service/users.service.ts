@@ -16,7 +16,11 @@ export class UsersService extends AppService {
     return this.userModel.create(newUser);
   }
 
-  findUser(query: { [key: string]: string }): Promise<User | null> {
+  findUser(query: { [key: string]: string }) {
     return this.userModel.findOne(query).exec();
+  }
+
+  findUserById(id: string) {
+    return this.userModel.findById(id).select('-password').exec();
   }
 }
