@@ -3,8 +3,10 @@ import {
   Controller,
   HttpCode,
   Post,
+  Request,
   Res,
   UseFilters,
+  UseGuards,
   UsePipes,
 } from '@nestjs/common';
 import { Response } from 'express';
@@ -17,6 +19,9 @@ import {
 import { MongooseExceptionFilter, ZodValidationPipe } from 'src/common';
 import { AuthService } from '../service/auth.service';
 import { SignInDto, signInSchema } from '../dto/signIn.dto';
+import { RTokenGuard } from '../guard/rToken.guard';
+
+type Cred = { access_token: string; refresh_token: string };
 
 @Controller('auth')
 @UseFilters(MongooseExceptionFilter)
@@ -37,6 +42,19 @@ export class AuthController {
       signInDto.email,
       signInDto.password,
     );
+    return this.genResponse(res, cred);
+  }
+
+  @UseGuards(RTokenGuard)
+  @Post('refresh')
+  @HttpCode(200)
+  async refreshAToken(@Request() req, @Res() res: Response) {
+    const cred = await this.authService.createCred({ sub: req.user.id });
+
+    return this.genResponse(res, cred);
+  }
+
+  private genResponse(res: Response, cred: Cred) {
     res.cookie('refresh_token', cred.refresh_token, {
       httpOnly: true,
       secure: true,

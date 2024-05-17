@@ -5,6 +5,8 @@ import { UsersService } from 'src/modules/users/service/users.service';
 import { AppService } from 'src/common';
 import { randomUUID } from 'crypto';
 
+type Payload = { sub: string; tokenId?: string };
+
 @Injectable()
 export class AuthService extends AppService {
   constructor(
@@ -32,6 +34,10 @@ export class AuthService extends AppService {
     const payload = {
       sub: user.id,
     };
+    return await this.createCred(payload);
+  }
+
+  async createCred(payload: Payload) {
     const access_token = await this.generateToken(
       payload,
       process.env.JWT_ACCESS_EXPIRES,
@@ -50,10 +56,7 @@ export class AuthService extends AppService {
     };
   }
 
-  private async generateToken(
-    payload: { sub: string; tokenId?: string },
-    expiresIn: string | number,
-  ) {
+  private async generateToken(payload: Payload, expiresIn: string | number) {
     return await this.jwtService.signAsync(payload, {
       expiresIn,
     });
