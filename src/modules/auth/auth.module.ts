@@ -10,7 +10,7 @@ import { AuthService } from './service/auth.service';
       useFactory: () => ({
         global: true,
         secret: process.env.JWT_SECRET,
-        signOptions: { expiresIn: process.env.JWT_EXPIRES },
+        signOptions: { expiresIn: process.env.JWT_ACCESS_EXPIRES },
       }),
     }),
     UsersModule,
