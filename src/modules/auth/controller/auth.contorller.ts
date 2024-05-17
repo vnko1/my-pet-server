@@ -1,6 +1,6 @@
 import {
   Body,
-  ConflictException,
+  // ConflictException,
   Controller,
   Post,
   UsePipes,
@@ -21,10 +21,10 @@ export class AuthController {
   @Post('register')
   @UsePipes(new ZodValidationPipe(createUserSchema))
   async createUser(@Body() createUserDto: CreateUserDto) {
-    try {
-      await this.authService.signUp(createUserDto);
-    } catch (error) {
-      throw new ConflictException();
-    }
+    await this.authService.signUp(createUserDto);
+    // try {
+    // } catch (error) {
+    //   throw new ConflictException(error.message);
+    // }
   }
 }
