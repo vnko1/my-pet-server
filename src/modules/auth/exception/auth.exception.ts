@@ -1,6 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
 import { MongoError } from 'mongodb';
-import { AppService } from 'src/services';
+import { AppService } from 'src/common';
 
 @Catch(MongoError)
 export class AuthExceptionFilter extends AppService implements ExceptionFilter {

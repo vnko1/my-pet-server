@@ -14,7 +14,7 @@ import {
 
 import { AuthService } from '../service/auth.service';
 import { AuthExceptionFilter } from '../exception/auth.exception';
-import { ZodValidationPipe } from 'src/services';
+import { ZodValidationPipe } from 'src/common';
 import { SignInDto, signInSchema } from '../dto/signIn.dto';
 
 @Controller('auth')

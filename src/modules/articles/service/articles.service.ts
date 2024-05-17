@@ -2,7 +2,7 @@ import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { AppService } from 'src/services';
+import { AppService } from 'src/common';
 
 import { Article } from '../schema/articles.schema';
 import { ArticlesQueryDto } from '../dto/articles-query.dto';

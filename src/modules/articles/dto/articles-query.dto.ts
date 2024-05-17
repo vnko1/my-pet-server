@@ -1,3 +1,3 @@
-import { AppDto } from 'src/dto/app.dto';
+import { AppDto } from 'src/common';
 
 export class ArticlesQueryDto extends AppDto {}
