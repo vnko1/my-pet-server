@@ -1,11 +1,24 @@
-import { Controller, Get, Request, UseGuards } from '@nestjs/common';
-import { AuthGuard } from 'src/common';
+import {
+  Controller,
+  Get,
+  Put,
+  Request,
+  UseFilters,
+  UseGuards,
+} from '@nestjs/common';
 
-@Controller('user')
+import { AuthGuard, MongooseExceptionFilter } from 'src/common';
+
+@Controller('profile')
+@UseFilters(MongooseExceptionFilter)
 export class UserController {
   @UseGuards(AuthGuard)
-  @Get('profile')
+  @Get()
   getProfile(@Request() req) {
     return req.user;
   }
+
+  @UseGuards(AuthGuard)
+  @Put()
+  updateProfile() {}
 }
