@@ -4,9 +4,10 @@ import {
   CreateUserDto,
   createUserSchema,
 } from 'src/modules/users/dto/users.dto';
-import { ZodValidationPipe } from 'src/modules/users/pipe/users.pipe';
+
 import { AuthService } from '../service/auth.service';
 import { AuthExceptionFilter } from '../exception/auth.exception';
+import { ZodValidationPipe } from 'src/services';
 
 @Controller('auth')
 @UseFilters(AuthExceptionFilter)
