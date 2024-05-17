@@ -3,22 +3,23 @@ import {
   Controller,
   HttpCode,
   Post,
+  Res,
   UseFilters,
   UsePipes,
 } from '@nestjs/common';
+import { Response } from 'express';
 
 import {
   CreateUserDto,
   createUserSchema,
 } from 'src/modules/users/dto/users.dto';
 
+import { MongooseExceptionFilter, ZodValidationPipe } from 'src/common';
 import { AuthService } from '../service/auth.service';
-import { AuthExceptionFilter } from '../exception/auth.exception';
-import { ZodValidationPipe } from 'src/common';
 import { SignInDto, signInSchema } from '../dto/signIn.dto';
 
 @Controller('auth')
-@UseFilters(AuthExceptionFilter)
+@UseFilters(MongooseExceptionFilter)
 export class AuthController {
   constructor(private authService: AuthService) {}
 
@@ -31,7 +32,15 @@ export class AuthController {
   @Post('login')
   @HttpCode(200)
   @UsePipes(new ZodValidationPipe(signInSchema))
-  async signIn(@Body() signInDto: SignInDto) {
-    return this.authService.signIn(signInDto.email, signInDto.password);
+  async signIn(@Body() signInDto: SignInDto, @Res() res: Response) {
+    const cred = await this.authService.signIn(
+      signInDto.email,
+      signInDto.password,
+    );
+    res.cookie('refresh_token', cred.refresh_token, {
+      httpOnly: true,
+      secure: true,
+    });
+    return res.send({ access_token: cred.access_token });
   }
 }

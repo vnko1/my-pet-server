@@ -3,7 +3,10 @@ import { MongoError } from 'mongodb';
 import { AppService } from 'src/common';
 
 @Catch(MongoError)
-export class AuthExceptionFilter extends AppService implements ExceptionFilter {
+export class MongooseExceptionFilter
+  extends AppService
+  implements ExceptionFilter
+{
   constructor() {
     super();
   }

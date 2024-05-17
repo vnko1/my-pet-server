@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/modules/users/dto/users.dto';
 import { UsersService } from 'src/modules/users/service/users.service';
 import { AppService } from 'src/common';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class AuthService extends AppService {
@@ -30,12 +31,31 @@ export class AuthService extends AppService {
 
     const payload = {
       sub: user.id,
-      username: user.name,
-      useremail: user.email,
     };
+    const access_token = await this.generateToken(
+      payload,
+      process.env.JWT_ACCESS_EXPIRES,
+    );
+    const refresh_token = await this.generateToken(
+      {
+        ...payload,
+        tokenId: randomUUID(),
+      },
+      process.env.JWT_REFRESH_EXPIRES,
+    );
 
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token,
+      refresh_token,
     };
+  }
+
+  private async generateToken(
+    payload: { sub: string; tokenId?: string },
+    expiresIn: string | number,
+  ) {
+    return await this.jwtService.signAsync(payload, {
+      expiresIn,
+    });
   }
 }
