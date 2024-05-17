@@ -1,6 +1,5 @@
-export { AppService } from './services/app.service';
-export { ZodValidationPipe } from './pipes/validation.pipe';
-export { AppHttpExceptionFilter } from './exceptions/app.exception';
-export { MongooseExceptionFilter } from './exceptions/mongoose.exception';
-export { AppDto } from './dto/app.dto';
-export { AuthGuard } from './guards/auth.guard';
+export { AppDto } from './dto';
+export { AppHttpExceptionFilter, MongooseExceptionFilter } from './exceptions';
+export { AppService } from './services/app/app.service';
+export { ZodValidationPipe } from './pipes';
+export { AuthGuard } from './guards';

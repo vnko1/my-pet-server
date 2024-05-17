@@ -6,7 +6,8 @@ import {
   InternalServerErrorException,
   HttpStatus,
 } from '@nestjs/common';
-import { AppService } from '../services/app.service';
+
+import { AppService } from 'src/common';
 
 @Catch()
 export class AppHttpExceptionFilter
