@@ -15,4 +15,8 @@ export class UsersService extends AppService {
   createUser(newUser: CreateUserDto) {
     return this.userModel.create(newUser);
   }
+
+  findUser(query: { [key: string]: string }): Promise<User | null> {
+    return this.userModel.findOne(query).exec();
+  }
 }
