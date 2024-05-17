@@ -42,7 +42,7 @@ export class AuthController {
       signInDto.email,
       signInDto.password,
     );
-    return this.genResponse(res, cred);
+    return this.genResponse(res, cred, +process.env.REFRESH_TOKEN_AGE);
   }
 
   @UseGuards(RTokenGuard)
@@ -51,13 +51,14 @@ export class AuthController {
   async refreshAToken(@Request() req, @Res() res: Response) {
     const cred = await this.authService.createCred({ sub: req.user.id });
 
-    return this.genResponse(res, cred);
+    return this.genResponse(res, cred, +process.env.REFRESH_TOKEN_AGE);
   }
 
-  private genResponse(res: Response, cred: Cred) {
+  private genResponse(res: Response, cred: Cred, maxAge: number) {
     res.cookie('refresh_token', cred.refresh_token, {
       httpOnly: true,
       secure: true,
+      maxAge,
     });
     return res.send({ access_token: cred.access_token });
   }
