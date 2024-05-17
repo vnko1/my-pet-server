@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { SponsorsService } from './service/sponors.service';
+import { SponsorsService } from './service/sponsors.service';
 import { Sponsor, SponsorSchema } from './schema/sponsor.schema';
-import { SponsorsController } from './controller/sponors.controller';
+import { SponsorsController } from './controller/sponsors.controller';
 
 @Module({
   imports: [

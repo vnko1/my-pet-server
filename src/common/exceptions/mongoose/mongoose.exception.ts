@@ -1,5 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
 import { MongoError } from 'mongodb';
+
 import { AppService } from 'src/common';
 
 @Catch(MongoError)
