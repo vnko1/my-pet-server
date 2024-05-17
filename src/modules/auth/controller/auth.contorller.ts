@@ -16,7 +16,11 @@ import {
   createUserSchema,
 } from 'src/modules/users/dto/users.dto';
 
-import { MongooseExceptionFilter, ZodValidationPipe } from 'src/common';
+import {
+  AuthGuard,
+  MongooseExceptionFilter,
+  ZodValidationPipe,
+} from 'src/common';
 import { AuthService } from '../service/auth.service';
 import { SignInDto, signInSchema } from '../dto/signIn.dto';
 import { RTokenGuard } from '../guard/rToken.guard';
@@ -52,6 +56,18 @@ export class AuthController {
     const cred = await this.authService.createCred({ sub: req.user.id });
 
     return this.genResponse(res, cred, +process.env.REFRESH_TOKEN_AGE);
+  }
+
+  @UseGuards(AuthGuard)
+  @Post('logout')
+  @HttpCode(204)
+  async logout(@Res() res: Response) {
+    res.cookie('refresh_token', '', {
+      httpOnly: true,
+      secure: true,
+      maxAge: -1,
+    });
+    return res.send();
   }
 
   private genResponse(res: Response, cred: Cred, maxAge: number) {
