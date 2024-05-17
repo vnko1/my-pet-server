@@ -14,7 +14,7 @@ import { Response } from 'express';
 import {
   CreateUserDto,
   createUserSchema,
-} from 'src/modules/users/dto/users.dto';
+} from 'src/modules/users/dto/createUser.dto';
 
 import {
   AuthGuard,
