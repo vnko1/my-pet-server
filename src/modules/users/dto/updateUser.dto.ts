@@ -13,7 +13,7 @@ export const updateUserSchema = z
   .object({
     name: z.string().min(2).max(15).optional(),
     email: z.string().email().regex(emailRegex).optional(),
-    birthday: z.string().optional(),
+    birthday: z.date().optional(),
     city: z.string().min(2).max(30).regex(cityRegex).optional(),
     phone: z.string().min(13).regex(phoneRegex).optional(),
     avatar: z

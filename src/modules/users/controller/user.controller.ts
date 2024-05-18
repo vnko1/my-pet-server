@@ -15,10 +15,13 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard, MongooseExceptionFilter } from 'src/common';
 
 import { UpdateUserDto, updateUserSchema } from '../dto/updateUser.dto';
+import { UsersService } from '../service/users.service';
 
 @Controller('profile')
 @UseFilters(MongooseExceptionFilter)
 export class UserController {
+  constructor(private userService: UsersService) {}
+
   @UseGuards(AuthGuard)
   @Get()
   getProfile(@Request() req) {
@@ -27,7 +30,7 @@ export class UserController {
 
   @Put()
   @UseInterceptors(FileInterceptor('avatar'))
-  updateProfile(
+  async updateProfile(
     @UploadedFile() avatar: Express.Multer.File,
     @Body() updateUserDto: UpdateUserDto,
   ) {
@@ -37,6 +40,8 @@ export class UserController {
     });
 
     if (!parsedSchema.success) throw new BadRequestException();
+
+    await this.userService.updateUser('1', parsedSchema.data);
 
     return { avatar, updateUserDto };
   }
