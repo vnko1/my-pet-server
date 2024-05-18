@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UploadApiOptions, v2 as cloudinary } from 'cloudinary';
+import fs from 'fs/promises';
 
 import { AppService } from '../app/app.service';
 
@@ -29,11 +30,14 @@ export class CloudinaryService extends AppService {
     return url.split('/').slice(sliceValue).join('/').split('.')[0];
   }
 
-  async upload(file: string, options?: Partial<UploadApiOptions>) {
+  async upload(filePath: string, options?: Partial<UploadApiOptions>) {
     try {
-      return await this.cloudinary.uploader.upload(file, options);
+      return await this.cloudinary.uploader.upload(filePath, options);
     } catch (error) {
-      throw new BadRequestException(error.message);
+      console.log('🚀 ~ CloudinaryService ~ upload ~ error:', error);
+      // throw new BadRequestException(error.message);
+    } finally {
+      fs.unlink(filePath);
     }
   }
 

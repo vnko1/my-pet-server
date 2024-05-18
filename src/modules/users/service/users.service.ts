@@ -1,14 +1,10 @@
 import { Model } from 'mongoose';
-import {
-  BadRequestException,
-  Injectable,
-  ServiceUnavailableException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { UploadApiOptions } from 'cloudinary';
 
 import { AppService, CloudinaryService } from 'src/common';
-import { User, UserDocument } from '../schema/users.schema';
+import { User } from '../schema/users.schema';
 import { CreateUserDto } from '../dto/createUser.dto';
 import { UpdateUserDto } from '../dto/updateUser.dto';
 
@@ -23,7 +19,7 @@ export class UsersService extends AppService {
 
   async updateUser(userId: string, updateUserDto: UpdateUserDto) {
     const { avatar, ...userData } = updateUserDto;
-    // throw new BadRequestException();
+
     const user: Partial<User> = { ...userData };
     user;
     if (avatar) {
@@ -34,10 +30,8 @@ export class UsersService extends AppService {
         eager: 'f_auto',
         overwrite: true,
       };
-      const res = await this.cloudinaryService.upload(
-        avatar.buffer.toString(),
-        options,
-      );
+      const res = await this.cloudinaryService.upload(avatar.path, options);
+
       console.log('🚀 ~ UsersService ~ updateUser ~ res:', res);
     }
   }
