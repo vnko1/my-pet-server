@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UploadApiOptions, v2 as cloudinary } from 'cloudinary';
-import { unlink } from 'fs/promises';
+
+import { deleteFile } from 'src/utils';
 
 import { AppService } from '../app/app.service';
 import { CloudinaryResponse } from './cloudinary-response.type';
@@ -40,7 +41,7 @@ export class CloudinaryService extends AppService {
     } catch (error) {
       throw new BadRequestException(error.message);
     } finally {
-      await unlink(filePath);
+      await deleteFile(filePath);
     }
   }
 
