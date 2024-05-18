@@ -30,6 +30,7 @@ export class UserController {
     return req.user;
   }
 
+  @UseGuards(AuthGuard)
   @Put()
   @UseInterceptors(
     FileInterceptor('avatar', {
@@ -37,6 +38,7 @@ export class UserController {
     }),
   )
   async updateProfile(
+    @Request() req,
     @UploadedFile() avatar: Express.Multer.File,
     @Body() updateUserDto: UpdateUserDto,
   ) {
@@ -47,6 +49,6 @@ export class UserController {
 
     if (!parsedSchema.success) throw new BadRequestException();
 
-    return await this.userService.updateUser('1', parsedSchema.data);
+    return this.userService.updateUser(req.user.id, parsedSchema.data);
   }
 }

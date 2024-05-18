@@ -4,9 +4,11 @@ import { InjectModel } from '@nestjs/mongoose';
 import { UploadApiOptions } from 'cloudinary';
 
 import { AppService, CloudinaryService } from 'src/common';
+
+import { CreateUserDto, UpdateUserDto } from '../dto';
 import { User } from '../schema/users.schema';
-import { CreateUserDto } from '../dto/createUser.dto';
-import { UpdateUserDto } from '../dto/updateUser.dto';
+
+import { UpdateOptions } from './users.type';
 
 @Injectable()
 export class UsersService extends AppService {
@@ -17,14 +19,23 @@ export class UsersService extends AppService {
     super();
   }
 
-  async updateUser(userId: string, updateUserDto: UpdateUserDto) {
+  async updateUser(
+    userId: string,
+    updateUserDto: UpdateUserDto,
+    { projection = '', newDoc = true }: Partial<UpdateOptions> = {},
+  ) {
     const { avatar, ...userData } = updateUserDto;
     const user: Partial<User> = { ...userData };
     if (avatar) {
       const avatarData = await this.saveAvatar(avatar.path, userId);
       user.avatarUrl = avatarData.eager[0].secure_url;
     }
-    return user;
+    return this.userModel
+      .findByIdAndUpdate(userId, user, {
+        new: newDoc,
+        projection,
+      })
+      .select('-password');
   }
 
   createUser(newUser: CreateUserDto) {
