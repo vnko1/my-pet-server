@@ -19,21 +19,12 @@ export class UsersService extends AppService {
 
   async updateUser(userId: string, updateUserDto: UpdateUserDto) {
     const { avatar, ...userData } = updateUserDto;
-
     const user: Partial<User> = { ...userData };
-    user;
     if (avatar) {
-      const options: UploadApiOptions = {
-        resource_type: 'image',
-        folder: 'pets/avatar',
-        public_id: userId,
-        eager: 'f_auto',
-        overwrite: true,
-      };
-      const res = await this.cloudinaryService.upload(avatar.path, options);
-
-      console.log('🚀 ~ UsersService ~ updateUser ~ res:', res);
+      const avatarData = await this.saveAvatar(avatar.path, userId);
+      user.avatarUrl = avatarData.eager[0].secure_url;
     }
+    return user;
   }
 
   createUser(newUser: CreateUserDto) {
@@ -48,7 +39,7 @@ export class UsersService extends AppService {
     return this.userModel.findById(id).select('-password').exec();
   }
 
-  private getUploadOptions(id: string) {
+  private getUploadOptions(id: string): UploadApiOptions {
     return {
       resource_type: 'image',
       folder: 'pets/avatar',
@@ -56,5 +47,11 @@ export class UsersService extends AppService {
       eager: 'f_auto',
       overwrite: true,
     };
+  }
+  private async saveAvatar(filePath: string, userId: string) {
+    return await this.cloudinaryService.upload(
+      filePath,
+      this.getUploadOptions(userId),
+    );
   }
 }
