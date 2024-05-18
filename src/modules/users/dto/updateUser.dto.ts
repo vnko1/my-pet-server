@@ -1,13 +1,11 @@
-import { cityRegex, emailRegex, phoneRegex } from 'src/utils';
 import { z } from 'zod';
-
-const MAX_FILE_SIZE = 3 * 1024 * 1024;
-const ACCEPTED_IMAGE_TYPES = [
-  'image/jpeg',
-  'image/jpg',
-  'image/png',
-  'image/webp',
-];
+import {
+  cityRegex,
+  emailRegex,
+  phoneRegex,
+  MAX_FILE_SIZE,
+  ACCEPTED_IMAGE_TYPES,
+} from 'src/utils';
 
 export const updateUserSchema = z
   .object({

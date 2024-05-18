@@ -27,8 +27,8 @@ export class UsersService extends AppService {
     const { avatar, ...userData } = updateUserDto;
     const user: Partial<User> = { ...userData };
     if (avatar) {
-      const avatarData = await this.saveAvatar(avatar.path, userId);
-      user.avatarUrl = avatarData.eager[0].secure_url;
+      const res = await this.saveAvatar(avatar.path, userId);
+      user.avatarUrl = res.eager[0].secure_url;
     }
     return this.userModel
       .findByIdAndUpdate(userId, user, {

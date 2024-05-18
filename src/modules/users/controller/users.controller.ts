@@ -4,7 +4,7 @@ import {
   Controller,
   Get,
   Put,
-  Request,
+  Req,
   UploadedFile,
   UseFilters,
   UseGuards,
@@ -26,7 +26,7 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @Get()
-  getProfile(@Request() req) {
+  getProfile(@Req() req) {
     return req.user;
   }
 
@@ -38,7 +38,7 @@ export class UserController {
     }),
   )
   async updateProfile(
-    @Request() req,
+    @Req() req,
     @UploadedFile() avatar: Express.Multer.File,
     @Body() updateUserDto: UpdateUserDto,
   ) {

@@ -1,5 +1,5 @@
-import { emailRegex, passwordRegex } from 'src/utils';
 import { z } from 'zod';
+import { emailRegex, passwordRegex } from 'src/utils';
 
 export const createUserSchema = z
   .object({
