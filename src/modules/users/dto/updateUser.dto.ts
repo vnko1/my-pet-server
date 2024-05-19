@@ -9,11 +9,28 @@ import {
 
 export const updateUserSchema = z
   .object({
-    name: z.string().min(2).max(15).optional(),
-    email: z.string().email().regex(emailRegex).optional(),
-    birthday: z.date().optional(),
-    city: z.string().min(2).max(30).regex(cityRegex).optional(),
-    phone: z.string().min(13).regex(phoneRegex).optional(),
+    name: z
+      .string()
+      .min(2, 'Name must contain min 2 symbols')
+      .max(15, 'Name must contain max 15 symbols')
+      .optional(),
+    email: z
+      .string()
+      .email('Email is not valid')
+      .regex(emailRegex, 'Email is not valid')
+      .optional(),
+    birthday: z.string().optional(),
+    city: z
+      .string()
+      .min(2, 'City must contain min 2 symbols')
+      .max(30, 'City must contain max 30 symbols')
+      .regex(cityRegex, 'Invalid city')
+      .optional(),
+    phone: z
+      .string()
+      .min(13, 'Phone must contain min 13 symbols')
+      .regex(phoneRegex, 'Invalid phone')
+      .optional(),
     avatar: z
       .any()
       .refine((file) => {
