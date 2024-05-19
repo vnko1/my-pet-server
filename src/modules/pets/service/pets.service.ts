@@ -1,5 +1,5 @@
 import { Model } from 'mongoose';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { UploadApiOptions } from 'cloudinary';
 import { randomUUID } from 'crypto';
@@ -27,13 +27,16 @@ export class PetsService extends AppService {
         image.path,
         this.getCloudinaryConfig(userId),
       );
+
       pet.imageUrl = res.eager[0].secure_url;
     }
     return this.petModel.create(pet);
   }
 
   async deletePet(id: string) {
-    console.log(id);
+    const res: Pet = await this.petModel.findByIdAndDelete(id);
+    if (!res) throw new NotFoundException();
+    this.cloudinaryService.delete(res.imageUrl);
   }
 
   private getCloudinaryConfig(id: string): UploadApiOptions {

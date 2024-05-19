@@ -8,6 +8,9 @@ import {
   UploadedFile,
   Body,
   BadRequestException,
+  Delete,
+  Param,
+  HttpCode,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard, MongooseExceptionFilter } from 'src/common';
@@ -17,6 +20,7 @@ import { multerStorageConfig } from 'src/utils';
 
 import { PetsService } from '../service/pets.service';
 import { CreatePetDto, createPetSchema } from '../dto/createPet.dto';
+import { isValidObjectId } from 'mongoose';
 
 @Controller('pet')
 @UseFilters(MongooseExceptionFilter)
@@ -44,5 +48,12 @@ export class PetsController {
       throw new BadRequestException(parsedSchema.error.errors[0].message);
 
     return await this.petService.createPet(req.user.id, parsedSchema.data);
+  }
+  @UseGuards(AuthGuard)
+  @Delete(':id')
+  @HttpCode(204)
+  async deletePet(@Param('id') id: string) {
+    if (!isValidObjectId(id)) throw new BadRequestException();
+    await this.petService.deletePet(id);
   }
 }
