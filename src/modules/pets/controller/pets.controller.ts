@@ -41,7 +41,7 @@ export class PetsController {
     });
 
     if (!parsedSchema.success) {
-      await deleteFile(image.path);
+      if (image?.path) await deleteFile(image.path);
       throw new BadRequestException();
     }
 

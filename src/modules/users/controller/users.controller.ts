@@ -48,7 +48,7 @@ export class UserController {
     });
 
     if (!parsedSchema.success) {
-      if (avatar?.path) await deleteFile(avatar?.path);
+      if (avatar?.path) await deleteFile(avatar.path);
       throw new BadRequestException();
     }
 
