@@ -6,14 +6,14 @@ import { UploadApiOptions } from 'cloudinary';
 import { AppService, CloudinaryService } from 'src/common';
 
 import { CreateUserDto, UpdateUserDto } from '../dto';
-import { User } from '../schema/users.schema';
+import { User, UserDocument } from '../schema/users.schema';
 
 import { UpdateOptions } from './users.type';
 
 @Injectable()
 export class UsersService extends AppService {
   constructor(
-    @InjectModel(User.name) private userModel: Model<User>,
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
     private cloudinaryService: CloudinaryService,
   ) {
     super();

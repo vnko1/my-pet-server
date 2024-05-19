@@ -18,10 +18,10 @@ export class User {
   @Prop({ required: true, minlength: 2, maxlength: 15 })
   name: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Pet' })
-  pets: Pet[];
+  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: Pet.name }])
+  pets: [Pet];
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Notice' })
+  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Notice' }])
   favorites: Notice[];
 
   @Prop({ min: new Date('1940-01-01'), max: new Date() })

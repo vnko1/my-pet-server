@@ -6,13 +6,13 @@ import { randomUUID } from 'crypto';
 
 import { AppService, CloudinaryService } from 'src/common';
 
-import { Pet } from '../schema/pets.schema';
+import { Pet, PetsDocument } from '../schema/pets.schema';
 import { CreatePetDto } from '../dto/createPet.dto';
 
 @Injectable()
 export class PetsService extends AppService {
   constructor(
-    @InjectModel(Pet.name) private petModel: Model<Pet>,
+    @InjectModel(Pet.name) private petModel: Model<PetsDocument>,
     private cloudinaryService: CloudinaryService,
   ) {
     super();

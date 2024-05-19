@@ -4,14 +4,16 @@ import { InjectModel } from '@nestjs/mongoose';
 
 import { AppService } from 'src/common';
 
-import { Article } from '../schema/articles.schema';
+import { Article, ArticlesDocument } from '../schema/articles.schema';
 import { ArticlesQueryDto } from '../dto/articles-query.dto';
 
 @Injectable()
 export class ArticlesService extends AppService {
   limit = 6;
 
-  constructor(@InjectModel(Article.name) private articleModel: Model<Article>) {
+  constructor(
+    @InjectModel(Article.name) private articleModel: Model<ArticlesDocument>,
+  ) {
     super();
   }
 
