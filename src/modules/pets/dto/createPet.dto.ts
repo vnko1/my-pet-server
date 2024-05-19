@@ -2,9 +2,12 @@ import { z } from 'zod';
 import { MAX_FILE_SIZE, ACCEPTED_IMAGE_TYPES } from 'src/utils';
 
 export const createPetSchema = z.object({
-  name: z.string().min(2).max(15),
-  date: z.string(),
-  type: z.string().min(2).max(16),
+  name: z
+    .string({ required_error: 'Name is required' })
+    .min(2, 'Name is required')
+    .max(15, 'Name is required'),
+  date: z.string({ required_error: 'Date is required' }),
+  type: z.string({ required_error: 'Type is required' }).min(2).max(16),
   comments: z.string().min(1).max(120).optional(),
   image: z
     .any()
