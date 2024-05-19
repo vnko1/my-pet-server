@@ -6,7 +6,10 @@ export const createPetSchema = z.object({
     .string({ required_error: 'Name is required' })
     .min(2, 'Name must contain min 2 symbols')
     .max(15, 'Name must contain max 15 symbols'),
-  date: z.string({ required_error: 'Date is required' }),
+  date: z.coerce
+    .date({ required_error: 'Date is required' })
+    .min(new Date('2000-01-01'), 'Too old')
+    .max(new Date('Too young')),
   type: z
     .string({ required_error: 'Type is required' })
     .min(2, 'Type must contain min 2 symbols')

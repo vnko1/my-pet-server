@@ -10,7 +10,7 @@ export class Pet {
   @Prop({ minlength: 2, maxlength: 15, required: true })
   name: string;
 
-  @Prop({ min: '2000-01-01', max: new Date() })
+  @Prop({ min: new Date('2000-01-01'), max: new Date() })
   date: Date;
 
   @Prop({ minlength: 2, maxlength: 16, required: true })

@@ -19,7 +19,11 @@ export const updateUserSchema = z
       .email('Email is not valid')
       .regex(emailRegex, 'Email is not valid')
       .optional(),
-    birthday: z.string().optional(),
+    birthday: z.coerce
+      .date()
+      .min(new Date('1940-01-01'), 'Too old')
+      .max(new Date(), 'Too young')
+      .optional(),
     city: z
       .string()
       .min(2, 'City must contain min 2 symbols')

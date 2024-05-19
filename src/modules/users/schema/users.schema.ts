@@ -24,7 +24,7 @@ export class User {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Notice' })
   favorites: Notice[];
 
-  @Prop({ min: '1940-01-01', max: new Date() })
+  @Prop({ min: new Date('1940-01-01'), max: new Date() })
   birthday: Date;
 
   @Prop({ minlength: 13, match: phoneRegex })
