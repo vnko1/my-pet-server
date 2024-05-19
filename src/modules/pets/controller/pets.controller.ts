@@ -11,6 +11,7 @@ import {
   Delete,
   Param,
   HttpCode,
+  Get,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard, MongooseExceptionFilter } from 'src/common';
@@ -26,6 +27,12 @@ import { isValidObjectId } from 'mongoose';
 @UseFilters(MongooseExceptionFilter)
 export class PetsController {
   constructor(private petService: PetsService) {}
+
+  @UseGuards(AuthGuard)
+  @Get()
+  async getUserPets(@Req() req) {
+    return await this.petService.getPets(req.user.id);
+  }
 
   @UseGuards(AuthGuard)
   @Post()
@@ -49,6 +56,7 @@ export class PetsController {
 
     return await this.petService.createPet(req.user.id, parsedSchema.data);
   }
+
   @UseGuards(AuthGuard)
   @Delete(':id')
   @HttpCode(204)
