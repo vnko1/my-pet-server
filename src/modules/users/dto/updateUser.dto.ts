@@ -1,21 +1,40 @@
-import { cityRegex, emailRegex, phoneRegex } from 'src/utils';
 import { z } from 'zod';
-
-const MAX_FILE_SIZE = 3 * 1024 * 1024;
-const ACCEPTED_IMAGE_TYPES = [
-  'image/jpeg',
-  'image/jpg',
-  'image/png',
-  'image/webp',
-];
+import {
+  cityRegex,
+  emailRegex,
+  phoneRegex,
+  MAX_FILE_SIZE,
+  ACCEPTED_IMAGE_TYPES,
+} from 'src/utils';
 
 export const updateUserSchema = z
   .object({
-    name: z.string().min(2).max(15).optional(),
-    email: z.string().email().regex(emailRegex).optional(),
-    birthday: z.date().optional(),
-    city: z.string().min(2).max(30).regex(cityRegex).optional(),
-    phone: z.string().min(13).regex(phoneRegex).optional(),
+    name: z
+      .string()
+      .min(2, 'Name must contain min 2 symbols')
+      .max(15, 'Name must contain max 15 symbols')
+      .optional(),
+    email: z
+      .string()
+      .email('Email is not valid')
+      .regex(emailRegex, 'Email is not valid')
+      .optional(),
+    birthday: z.coerce
+      .date()
+      .min(new Date('1940-01-01'), 'Too old')
+      .max(new Date(), 'Too young')
+      .optional(),
+    city: z
+      .string()
+      .min(2, 'City must contain min 2 symbols')
+      .max(30, 'City must contain max 30 symbols')
+      .regex(cityRegex, 'Invalid city')
+      .optional(),
+    phone: z
+      .string()
+      .min(13, 'Phone must contain min 13 symbols')
+      .regex(phoneRegex, 'Invalid phone')
+      .optional(),
     avatar: z
       .any()
       .refine((file) => {

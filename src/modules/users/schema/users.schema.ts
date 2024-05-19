@@ -2,8 +2,6 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 
 import { cityRegex, defaultAvatarUrl, emailRegex, phoneRegex } from 'src/utils';
-import { Notice } from 'src/modules/notices/schema/notices.schema';
-import { Pet } from 'src/modules/pets/schema/pets.schema';
 
 export type UserDocument = mongoose.HydratedDocument<User>;
 
@@ -18,13 +16,7 @@ export class User {
   @Prop({ required: true, minlength: 2, maxlength: 15 })
   name: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Pet' })
-  pets: Pet[];
-
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Notice' })
-  favorites: Notice[];
-
-  @Prop({ min: '1940-01-01', max: new Date() })
+  @Prop({ min: new Date('1940-01-01'), max: new Date() })
   birthday: Date;
 
   @Prop({ minlength: 13, match: phoneRegex })

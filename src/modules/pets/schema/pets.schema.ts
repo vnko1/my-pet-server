@@ -10,7 +10,7 @@ export class Pet {
   @Prop({ minlength: 2, maxlength: 15, required: true })
   name: string;
 
-  @Prop({ min: '2000-01-01', max: new Date() })
+  @Prop({ min: new Date('2000-01-01'), max: new Date() })
   date: Date;
 
   @Prop({ minlength: 2, maxlength: 16, required: true })
@@ -19,7 +19,7 @@ export class Pet {
   @Prop({ required: true })
   imageUrl: string;
 
-  @Prop({ required: true, maxlength: 120, default: '' })
+  @Prop({ maxlength: 120, default: '' })
   comments: string;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })

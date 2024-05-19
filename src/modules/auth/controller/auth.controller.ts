@@ -3,7 +3,7 @@ import {
   Controller,
   HttpCode,
   Post,
-  Request,
+  Req,
   Res,
   UseFilters,
   UseGuards,
@@ -52,7 +52,7 @@ export class AuthController {
   @UseGuards(RTokenGuard)
   @Post('refresh')
   @HttpCode(200)
-  async refreshAToken(@Request() req, @Res() res: Response) {
+  async refreshAToken(@Req() req, @Res() res: Response) {
     const cred = await this.authService.createCred({ sub: req.user.id });
 
     return this.genResponse(res, cred, +process.env.REFRESH_TOKEN_AGE);
