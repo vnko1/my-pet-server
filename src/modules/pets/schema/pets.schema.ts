@@ -19,7 +19,7 @@ export class Pet {
   @Prop({ required: true })
   imageUrl: string;
 
-  @Prop({ required: true, maxlength: 120, default: '' })
+  @Prop({ maxlength: 120, default: '' })
   comments: string;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })

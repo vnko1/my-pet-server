@@ -13,7 +13,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard, MongooseExceptionFilter } from 'src/common';
 import { diskStorage } from 'multer';
 
-import { deleteFile, multerStorageConfig } from 'src/utils';
+import { multerStorageConfig } from 'src/utils';
 
 import { PetsService } from '../service/pets.service';
 import { CreatePetDto, createPetSchema } from '../dto/createPet.dto';
@@ -40,10 +40,8 @@ export class PetsController {
       image,
     });
 
-    if (!parsedSchema.success) {
-      if (image?.path) await deleteFile(image.path);
-      throw new BadRequestException();
-    }
+    if (!parsedSchema.success)
+      throw new BadRequestException(parsedSchema.error.errors[0].message);
 
     return await this.petService.createPet(req.user.id, parsedSchema.data);
   }

@@ -14,7 +14,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 
 import { AuthGuard, MongooseExceptionFilter } from 'src/common';
-import { deleteFile, multerStorageConfig } from 'src/utils';
+import { multerStorageConfig } from 'src/utils';
 
 import { UpdateUserDto, updateUserSchema } from '../dto/updateUser.dto';
 import { UsersService } from '../service/users.service';
@@ -47,10 +47,8 @@ export class UserController {
       avatar,
     });
 
-    if (!parsedSchema.success) {
-      if (avatar?.path) await deleteFile(avatar.path);
-      throw new BadRequestException();
-    }
+    if (!parsedSchema.success)
+      throw new BadRequestException(parsedSchema.error.errors[0].message);
 
     return this.userService.updateUser(req.user.id, parsedSchema.data);
   }
