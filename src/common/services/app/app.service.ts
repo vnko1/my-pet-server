@@ -1,5 +1,6 @@
 import { ArgumentsHost, HttpStatus } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { Request } from 'express';
 
 export abstract class AppService {
   protected page = 1;
@@ -9,6 +10,11 @@ export abstract class AppService {
 
   protected async hashPassword(password: string) {
     return await bcrypt.hash(password, this.saltOrRounds);
+  }
+
+  protected extractTokenFromHeader(request: Request): string | undefined {
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : undefined;
   }
 
   protected async checkPassword(password: string, hash: string) {
