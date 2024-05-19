@@ -23,18 +23,17 @@ import { PetsService } from '../service/pets.service';
 import { CreatePetDto, createPetSchema } from '../dto/createPet.dto';
 import { isValidObjectId } from 'mongoose';
 
-@Controller('pet')
+@Controller('pets')
+@UseGuards(AuthGuard)
 @UseFilters(MongooseExceptionFilter)
 export class PetsController {
   constructor(private petService: PetsService) {}
 
-  @UseGuards(AuthGuard)
   @Get()
   async getUserPets(@Req() req) {
     return await this.petService.getPets(req.user.id);
   }
 
-  @UseGuards(AuthGuard)
   @Post()
   @UseInterceptors(
     FileInterceptor('image', {
@@ -57,7 +56,6 @@ export class PetsController {
     return await this.petService.createPet(req.user.id, parsedSchema.data);
   }
 
-  @UseGuards(AuthGuard)
   @Delete(':id')
   @HttpCode(204)
   async deletePet(@Param('id') id: string) {
