@@ -18,8 +18,8 @@ export class PetsService extends AppService {
     super();
   }
 
-  async getPets(id: string) {
-    console.log('🚀 ~ PetsService ~ getPets ~ id:', id);
+  async getPets(owner: string) {
+    return this.petModel.find({ owner });
   }
 
   async createPet(userId: string, createPetDto: CreatePetDto) {
