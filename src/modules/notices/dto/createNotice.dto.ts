@@ -4,7 +4,7 @@ import { MAX_FILE_SIZE, ACCEPTED_IMAGE_TYPES } from 'src/utils';
 export const createNoticeSchema = z
   .object({
     category: z.enum(['sell', 'lost-found', 'in-good-hands'], {
-      required_error: 'Field is required',
+      required_error: 'Category is required',
     }),
     name: z
       .string({ required_error: 'Name is required' })
