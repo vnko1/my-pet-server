@@ -63,7 +63,7 @@ export class NoticesController {
       ...createNoticeDto,
       file,
     });
-    console.log(parsedSchema.error.errors[0]);
+
     if (!parsedSchema.success)
       throw new BadRequestException(parsedSchema.error.errors[0].message);
 
