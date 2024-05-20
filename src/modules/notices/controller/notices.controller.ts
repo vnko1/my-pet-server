@@ -1,4 +1,6 @@
 import {
+  BadRequestException,
+  Body,
   Controller,
   Delete,
   Get,
@@ -17,14 +19,17 @@ import { AuthGuard, MongooseExceptionFilter } from 'src/common';
 import { IUserId } from 'src/types';
 import { multerStorageConfig } from 'src/utils';
 
+import { CreateNoticeDto, createNoticeSchema } from '../dto/createNotice.dto';
+import { NoticesService } from '../service/notices.service';
+
 @Controller('notices')
 @UseFilters(MongooseExceptionFilter)
 export class NoticesController {
-  constructor() {}
+  constructor(private noticesService: NoticesService) {}
 
   @Get()
   async getAllNotices(@Req() req: Partial<IUserId>) {
-    return req?.user.id;
+    return req?.user?.id;
   }
 
   @Get(':id')
@@ -52,7 +57,18 @@ export class NoticesController {
   async addNotice(
     @Req() req: IUserId,
     @UploadedFile() image: Express.Multer.File,
-  ) {}
+    @Body() createNoticeDto: CreateNoticeDto,
+  ) {
+    const parsedSchema = createNoticeSchema.safeParse({
+      ...createNoticeDto,
+      image,
+    });
+
+    if (!parsedSchema.success)
+      throw new BadRequestException(parsedSchema.error.errors[0].message);
+
+    return await this.noticesService.addNotice(req.user.id, parsedSchema.data);
+  }
 
   @UseGuards(AuthGuard)
   @Get('owner')
