@@ -55,7 +55,7 @@ export class NoticesController {
       storage: diskStorage(multerStorageConfig),
     }),
   )
-  @HttpCode(204)
+  @HttpCode(201)
   async addNotice(
     @Req() req: IUserId,
     @UploadedFile() file: Express.Multer.File,
