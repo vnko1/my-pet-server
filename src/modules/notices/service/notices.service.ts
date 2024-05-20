@@ -1,5 +1,5 @@
 import { Model } from 'mongoose';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { randomUUID } from 'crypto';
 
@@ -45,10 +45,18 @@ export class NoticesService extends AppService {
   }
 
   async getNotice(id: string) {
-    return this.noticeModel.findById(id);
+    const res = await this.noticeModel.findById(id);
+    if (!res) throw new NotFoundException(`Notice with id: ${id} not exists`);
+    return res;
   }
 
   async getOwnersNotices(owner: string) {
     return this.noticeModel.find({ owner });
+  }
+
+  async deleteNotice(id: string) {
+    const res: Notice = await this.noticeModel.findByIdAndDelete(id);
+    if (!res) throw new NotFoundException(`Notice with id: ${id} not exists`);
+    this.cloudinaryService.delete(res.imageUrl);
   }
 }

@@ -15,6 +15,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { isValidObjectId } from 'mongoose';
 
 import { AuthGuard, MongooseExceptionFilter } from 'src/common';
 import { IUserId } from 'src/types';
@@ -81,6 +82,11 @@ export class NoticesController {
   }
 
   @UseGuards(AuthGuard)
-  @Delete(':id')
-  async deleteNotice(@Param('id') id: string) {}
+  @Delete('notice/:id')
+  @HttpCode(204)
+  async deleteNotice(@Param('id') id: string) {
+    if (!isValidObjectId(id)) throw new BadRequestException();
+
+    await this.noticesService.deleteNotice(id);
+  }
 }

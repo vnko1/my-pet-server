@@ -49,7 +49,7 @@ export class PetsService extends AppService {
 
   async deletePet(id: string) {
     const res: Pet = await this.petModel.findByIdAndDelete(id);
-    if (!res) throw new NotFoundException();
+    if (!res) throw new NotFoundException(`Pet with id: ${id} not exists`);
     this.cloudinaryService.delete(res.imageUrl);
   }
 }
