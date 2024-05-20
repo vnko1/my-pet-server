@@ -2,15 +2,18 @@ import { Model } from 'mongoose';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { randomUUID } from 'crypto';
+import { UploadApiOptions } from 'cloudinary';
 
-import { AppService, CloudinaryService } from 'src/common';
+import { AppService, CloudinaryService, QueryDto } from 'src/common';
 
 import { Notice, NoticeDocument } from '../schema/notices.schema';
 import { CreateNoticeDto } from '../dto/createNotice.dto';
-import { UploadApiOptions } from 'cloudinary';
+import { NoticesQueryDto } from '../dto/noticesQueryDto.dto';
 
 @Injectable()
 export class NoticesService extends AppService {
+  private limit = 6;
+
   constructor(
     @InjectModel(Notice.name) private noticeModel: Model<NoticeDocument>,
     private cloudinaryService: CloudinaryService,
@@ -26,6 +29,25 @@ export class NoticesService extends AppService {
       public_id: randomUUID(),
       eager: 'f_auto',
     };
+  }
+
+  private getNoticesSearchPattern(
+    { query, sex, category }: NoticesQueryDto,
+    userId?: string,
+  ) {
+    const queryParams: QueryDto = this.getSearchQueryPattern(query);
+
+    if (sex) queryParams.sex = sex.split(',');
+
+    if (category === 'own' || category === 'favorites') {
+      if (category === 'favorites' && userId) {
+        queryParams[category] = { $elemMatch: { $eq: userId } };
+      } else if (userId) {
+        queryParams.owner = userId;
+      }
+    } else queryParams.category = category;
+
+    return queryParams;
   }
 
   async addNotice(userId: string, createNoticeDto: CreateNoticeDto) {
@@ -64,8 +86,23 @@ export class NoticesService extends AppService {
     );
   }
 
-  async getFavorites(userId: string) {
-    return this.noticeModel.find();
+  async getFavorites(userId: string, query: NoticesQueryDto) {
+    const queryPattern = this.getNoticesSearchPattern(
+      { ...query, category: 'favorites' },
+      userId,
+    );
+    const sortPattern = this.getSortingPattern('date');
+    const perPage = this.getSkipPattern(query.page, this.limit);
+
+    const data = await this.noticeModel
+      .find(queryPattern)
+      .skip(perPage)
+      .limit(this.limit)
+      .sort(sortPattern)
+      .exec();
+
+    const total = await this.noticeModel.countDocuments(queryPattern);
+    return { data, total };
   }
 
   async getNotice(id: string) {

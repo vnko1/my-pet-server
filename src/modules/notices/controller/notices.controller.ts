@@ -7,6 +7,7 @@ import {
   HttpCode,
   Param,
   Post,
+  Query,
   Req,
   UploadedFile,
   UseFilters,
@@ -23,6 +24,7 @@ import { multerStorageConfig } from 'src/utils';
 
 import { CreateNoticeDto, createNoticeSchema } from '../dto/createNotice.dto';
 import { NoticesService } from '../service/notices.service';
+import { NoticesQueryDto } from '../dto/noticesQueryDto.dto';
 
 @Controller('notices')
 @UseFilters(MongooseExceptionFilter)
@@ -47,7 +49,9 @@ export class NoticesController {
 
   @UseGuards(AuthGuard)
   @Get('favorites')
-  async getFavorites(@Req() req: IUserId) {}
+  async getFavorites(@Req() req: IUserId, @Query() query: NoticesQueryDto) {
+    return await this.noticesService.getFavorites(req.user.id, query);
+  }
 
   @UseGuards(AuthGuard)
   @Delete('favorites/:id')
