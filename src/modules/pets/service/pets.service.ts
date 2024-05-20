@@ -18,17 +18,27 @@ export class PetsService extends AppService {
     super();
   }
 
+  private getCloudinaryConfig(id: string): UploadApiOptions {
+    return {
+      overwrite: false,
+      resource_type: 'image',
+      folder: `pets/pets/${id}`,
+      public_id: randomUUID(),
+      eager: 'f_auto',
+    };
+  }
+
   async getPets(owner: string) {
     return this.petModel.find({ owner });
   }
 
   async createPet(userId: string, createPetDto: CreatePetDto) {
-    const { image, ...petData } = createPetDto;
+    const { file, ...petData } = createPetDto;
     const pet: any = { ...petData, owner: userId };
 
-    if (image) {
+    if (file) {
       const res = await this.cloudinaryService.upload(
-        image.path,
+        file.path,
         this.getCloudinaryConfig(userId),
       );
 
@@ -39,17 +49,7 @@ export class PetsService extends AppService {
 
   async deletePet(id: string) {
     const res: Pet = await this.petModel.findByIdAndDelete(id);
-    if (!res) throw new NotFoundException();
+    if (!res) throw new NotFoundException(`Pet with id: ${id} not exists`);
     this.cloudinaryService.delete(res.imageUrl);
-  }
-
-  private getCloudinaryConfig(id: string): UploadApiOptions {
-    return {
-      overwrite: false,
-      resource_type: 'image',
-      folder: `pets/pets/${id}`,
-      public_id: randomUUID(),
-      eager: 'f_auto',
-    };
   }
 }

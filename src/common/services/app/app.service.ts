@@ -28,6 +28,9 @@ export abstract class AppService {
             { title: { $regex: query, $options: 'i' } },
             { text: { $regex: query, $options: 'i' } },
             { comments: { $regex: query, $options: 'i' } },
+            { name: { $regex: query, $options: 'i' } },
+            { type: { $regex: query, $options: 'i' } },
+            { location: { $regex: query, $options: 'i' } },
           ],
         }
       : {};

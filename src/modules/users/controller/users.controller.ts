@@ -15,9 +15,11 @@ import { diskStorage } from 'multer';
 
 import { AuthGuard, MongooseExceptionFilter } from 'src/common';
 import { multerStorageConfig } from 'src/utils';
+import { IUserId } from 'src/types';
 
 import { UpdateUserDto, updateUserSchema } from '../dto/updateUser.dto';
 import { UsersService } from '../service/users.service';
+import { User } from '../schema/users.schema';
 
 @Controller('profile')
 @UseFilters(MongooseExceptionFilter)
@@ -26,25 +28,25 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @Get()
-  getProfile(@Req() req) {
+  getProfile(@Req() req: { user: User }) {
     return req.user;
   }
 
   @UseGuards(AuthGuard)
   @Put()
   @UseInterceptors(
-    FileInterceptor('avatar', {
+    FileInterceptor('file', {
       storage: diskStorage(multerStorageConfig),
     }),
   )
   async updateProfile(
-    @Req() req,
-    @UploadedFile() avatar: Express.Multer.File,
+    @Req() req: IUserId,
+    @UploadedFile() file: Express.Multer.File,
     @Body() updateUserDto: UpdateUserDto,
   ) {
     const parsedSchema = updateUserSchema.safeParse({
       ...updateUserDto,
-      avatar,
+      file,
     });
 
     if (!parsedSchema.success)

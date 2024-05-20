@@ -35,7 +35,7 @@ export const updateUserSchema = z
       .min(13, 'Phone must contain min 13 symbols')
       .regex(phoneRegex, 'Invalid phone')
       .optional(),
-    avatar: z
+    file: z
       .any()
       .refine((file) => {
         return file?.size <= MAX_FILE_SIZE;

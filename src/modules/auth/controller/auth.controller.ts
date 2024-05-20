@@ -21,6 +21,8 @@ import {
   MongooseExceptionFilter,
   ZodValidationPipe,
 } from 'src/common';
+import { IUserId } from 'src/types';
+
 import { AuthService } from '../service/auth.service';
 import { SignInDto, signInSchema } from '../dto/signIn.dto';
 import { RTokenGuard } from '../guard/rToken.guard';
@@ -52,7 +54,7 @@ export class AuthController {
   @UseGuards(RTokenGuard)
   @Post('refresh')
   @HttpCode(200)
-  async refreshAToken(@Req() req, @Res() res: Response) {
+  async refreshAToken(@Req() req: IUserId, @Res() res: Response) {
     const cred = await this.authService.createCred({ sub: req.user.id });
 
     return this.genResponse(res, cred, +process.env.REFRESH_TOKEN_AGE);
