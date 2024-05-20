@@ -33,7 +33,7 @@ export class NoticesController {
     return req?.user?.id;
   }
 
-  @Get(':id')
+  @Get('notice/:id')
   async getNotice(@Param('id') id: string) {
     return await this.noticesService.getNotice(id);
   }
@@ -76,7 +76,9 @@ export class NoticesController {
 
   @UseGuards(AuthGuard)
   @Get('owner')
-  async getOwnerNotices(@Req() req: IUserId) {}
+  async getUserNotices(@Req() req: IUserId) {
+    return await this.noticesService.getOwnersNotices(req.user.id);
+  }
 
   @UseGuards(AuthGuard)
   @Delete(':id')

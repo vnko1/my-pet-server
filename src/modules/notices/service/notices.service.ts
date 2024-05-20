@@ -47,4 +47,8 @@ export class NoticesService extends AppService {
   async getNotice(id: string) {
     return this.noticeModel.findById(id);
   }
+
+  async getOwnersNotices(owner: string) {
+    return this.noticeModel.find({ owner });
+  }
 }
