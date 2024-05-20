@@ -31,10 +31,13 @@ import { NoticesQueryDto } from '../dto/noticesQueryDto.dto';
 export class NoticesController {
   constructor(private noticesService: NoticesService) {}
 
-  // @Get()
-  // async getAllNotices(@Req() req: Partial<IUserId>) {
-  //   return req?.user?.id;
-  // }
+  @Get()
+  async getAllNotices(
+    @Req() req: Partial<IUserId>,
+    @Query() query: NoticesQueryDto,
+  ) {
+    return await this.noticesService.getNotices(req?.user?.id, query);
+  }
 
   @Get('notice/:id')
   async getNotice(@Param('id') id: string) {
@@ -50,7 +53,10 @@ export class NoticesController {
   @UseGuards(AuthGuard)
   @Get('favorites')
   async getFavorites(@Req() req: IUserId, @Query() query: NoticesQueryDto) {
-    return await this.noticesService.getFavorites(req.user.id, query);
+    return await this.noticesService.getNotices(req.user.id, {
+      ...query,
+      category: 'favorites',
+    });
   }
 
   @UseGuards(AuthGuard)
@@ -85,8 +91,11 @@ export class NoticesController {
 
   @UseGuards(AuthGuard)
   @Get('owner')
-  async getUserNotices(@Req() req: IUserId) {
-    return await this.noticesService.getOwnersNotices(req.user.id);
+  async getUserNotices(@Req() req: IUserId, query: NoticesQueryDto) {
+    return await this.noticesService.getNotices(req.user.id, {
+      ...query,
+      category: 'owner',
+    });
   }
 
   @UseGuards(AuthGuard)

@@ -39,7 +39,7 @@ export class NoticesService extends AppService {
 
     if (sex) queryParams.sex = sex.split(',');
 
-    if (category === 'own' || category === 'favorites') {
+    if (category === 'owner' || category === 'favorites') {
       if (category === 'favorites' && userId) {
         queryParams[category] = { $elemMatch: { $eq: userId } };
       } else if (userId) {
@@ -48,6 +48,22 @@ export class NoticesService extends AppService {
     } else queryParams.category = category;
 
     return queryParams;
+  }
+
+  async getNotices(userId: string, query: NoticesQueryDto) {
+    const queryPattern = this.getNoticesSearchPattern(query, userId);
+    const sortPattern = this.getSortingPattern('date');
+    const perPage = this.getSkipPattern(query.page, this.limit);
+
+    const data = await this.noticeModel
+      .find(queryPattern)
+      .skip(perPage)
+      .limit(this.limit)
+      .sort(sortPattern)
+      .exec();
+
+    const total = await this.noticeModel.countDocuments(queryPattern);
+    return { data, total };
   }
 
   async addNotice(userId: string, createNoticeDto: CreateNoticeDto) {
@@ -86,33 +102,10 @@ export class NoticesService extends AppService {
     );
   }
 
-  async getFavorites(userId: string, query: NoticesQueryDto) {
-    const queryPattern = this.getNoticesSearchPattern(
-      { ...query, category: 'favorites' },
-      userId,
-    );
-    const sortPattern = this.getSortingPattern('date');
-    const perPage = this.getSkipPattern(query.page, this.limit);
-
-    const data = await this.noticeModel
-      .find(queryPattern)
-      .skip(perPage)
-      .limit(this.limit)
-      .sort(sortPattern)
-      .exec();
-
-    const total = await this.noticeModel.countDocuments(queryPattern);
-    return { data, total };
-  }
-
   async getNotice(id: string) {
     const res = await this.noticeModel.findById(id);
     if (!res) throw new NotFoundException(`Notice with id: ${id} not exists`);
     return res;
-  }
-
-  async getOwnersNotices(owner: string) {
-    return this.noticeModel.find({ owner });
   }
 
   async deleteNotice(id: string) {

@@ -43,7 +43,7 @@ export const createNoticeSchema = z
       return true;
     },
     {
-      message: 'Field is required',
+      message: 'Price is required',
       path: ['price'],
     },
   );
