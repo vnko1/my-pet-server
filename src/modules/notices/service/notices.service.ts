@@ -43,4 +43,8 @@ export class NoticesService extends AppService {
     }
     return this.noticeModel.create(notice);
   }
+
+  async getNotice(id: string) {
+    return this.noticeModel.findById(id);
+  }
 }

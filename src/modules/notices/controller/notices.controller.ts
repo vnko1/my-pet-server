@@ -34,7 +34,9 @@ export class NoticesController {
   }
 
   @Get(':id')
-  getNotice(@Param('id') id: string) {}
+  async getNotice(@Param('id') id: string) {
+    return await this.noticesService.getNotice(id);
+  }
 
   @UseGuards(AuthGuard)
   @Post('favorites')
