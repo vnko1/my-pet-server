@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Post,
   Req,
@@ -54,6 +55,7 @@ export class NoticesController {
       storage: diskStorage(multerStorageConfig),
     }),
   )
+  @HttpCode(204)
   async addNotice(
     @Req() req: IUserId,
     @UploadedFile() file: Express.Multer.File,

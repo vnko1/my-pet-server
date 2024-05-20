@@ -9,7 +9,7 @@ export class Notice {
   @Prop({ minlength: 2, maxlength: 16, required: true })
   name: string;
 
-  @Prop({ required: true, enum: ['sell', 'lost-found', 'for-free'] })
+  @Prop({ required: true, enum: ['sell', 'lost-found', 'in-good-hands'] })
   category: string;
 
   @Prop({ min: '2000-01-01', max: new Date() })

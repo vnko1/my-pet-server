@@ -1,11 +1,13 @@
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { randomUUID } from 'crypto';
 
 import { AppService, CloudinaryService } from 'src/common';
 
 import { Notice, NoticeDocument } from '../schema/notices.schema';
 import { CreateNoticeDto } from '../dto/createNotice.dto';
+import { UploadApiOptions } from 'cloudinary';
 
 @Injectable()
 export class NoticesService extends AppService {
@@ -16,11 +18,29 @@ export class NoticesService extends AppService {
     super();
   }
 
+  private getCloudinaryConfig(id: string): UploadApiOptions {
+    return {
+      overwrite: false,
+      resource_type: 'image',
+      folder: `pets/notices/${id}`,
+      public_id: randomUUID(),
+      eager: 'f_auto',
+    };
+  }
+
   async addNotice(userId: string, createNoticeDto: CreateNoticeDto) {
-    console.log(
-      '🚀 ~ NoticesService ~ addNotice ~ createNoticeDto:',
-      createNoticeDto,
-    );
-    console.log('🚀 ~ NoticesService ~ userId:', userId);
+    const { file, ...noticeData } = createNoticeDto;
+
+    const notice: any = { ...noticeData, owner: userId };
+
+    if (file) {
+      const res = await this.cloudinaryService.upload(
+        file.path,
+        this.getCloudinaryConfig(userId),
+      );
+
+      notice.imageUrl = res.eager[0].secure_url;
+    }
+    return this.noticeModel.create(notice);
   }
 }

@@ -36,6 +36,7 @@ export class PetsController {
   }
 
   @Post()
+  @HttpCode(201)
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage(multerStorageConfig),

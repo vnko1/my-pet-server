@@ -18,6 +18,16 @@ export class PetsService extends AppService {
     super();
   }
 
+  private getCloudinaryConfig(id: string): UploadApiOptions {
+    return {
+      overwrite: false,
+      resource_type: 'image',
+      folder: `pets/pets/${id}`,
+      public_id: randomUUID(),
+      eager: 'f_auto',
+    };
+  }
+
   async getPets(owner: string) {
     return this.petModel.find({ owner });
   }
@@ -41,15 +51,5 @@ export class PetsService extends AppService {
     const res: Pet = await this.petModel.findByIdAndDelete(id);
     if (!res) throw new NotFoundException();
     this.cloudinaryService.delete(res.imageUrl);
-  }
-
-  private getCloudinaryConfig(id: string): UploadApiOptions {
-    return {
-      overwrite: false,
-      resource_type: 'image',
-      folder: `pets/pets/${id}`,
-      public_id: randomUUID(),
-      eager: 'f_auto',
-    };
   }
 }
