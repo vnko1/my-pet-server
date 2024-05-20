@@ -18,14 +18,17 @@ export class RoleGuard extends AppService implements CanActivate {
     const token = this.extractTokenFromHeader(request);
 
     if (!token) return true;
-    const payload = await this.jwtService.verifyAsync(token, {
-      secret: process.env.JWT_SECRET,
-    });
+    try {
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: process.env.JWT_SECRET,
+      });
 
-    const user = await this.userService.findUserById(payload.sub);
-    if (!user) return true;
-    request['user'] = user;
-
-    return true;
+      const user = await this.userService.findUserById(payload.sub);
+      if (!user) return true;
+      request['user'] = user;
+      return true;
+    } catch (e) {
+      return true;
+    }
   }
 }

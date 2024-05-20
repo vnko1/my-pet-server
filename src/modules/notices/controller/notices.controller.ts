@@ -6,9 +6,10 @@ import { RoleGuard } from '../guard/notices.guard';
 @UseFilters(MongooseExceptionFilter)
 export class NoticesController {
   constructor() {}
-  @UseGuards(RoleGuard);
+
+  //   @UseGuards(RoleGuard)
   @Get()
-  async getAllNotices(@Req() req) {
-    return req.user?.id;
+  async getAllNotices(@Req() req: { user?: { id?: string } }) {
+    return req?.user?.id;
   }
 }
