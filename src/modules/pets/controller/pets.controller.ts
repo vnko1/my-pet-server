@@ -37,18 +37,18 @@ export class PetsController {
 
   @Post()
   @UseInterceptors(
-    FileInterceptor('image', {
+    FileInterceptor('file', {
       storage: diskStorage(multerStorageConfig),
     }),
   )
   async createPet(
     @Req() req: IUserId,
-    @UploadedFile() image: Express.Multer.File,
+    @UploadedFile() file: Express.Multer.File,
     @Body() createPetDto: CreatePetDto,
   ) {
     const parsedSchema = createPetSchema.safeParse({
       ...createPetDto,
-      image,
+      file,
     });
 
     if (!parsedSchema.success)

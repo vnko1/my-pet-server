@@ -23,12 +23,12 @@ export class PetsService extends AppService {
   }
 
   async createPet(userId: string, createPetDto: CreatePetDto) {
-    const { image, ...petData } = createPetDto;
+    const { file, ...petData } = createPetDto;
     const pet: any = { ...petData, owner: userId };
 
-    if (image) {
+    if (file) {
       const res = await this.cloudinaryService.upload(
-        image.path,
+        file.path,
         this.getCloudinaryConfig(userId),
       );
 

@@ -18,7 +18,7 @@ export const createPetSchema = z.object({
     .string()
     .max(120, 'Comment must contain max 120 symbols')
     .optional(),
-  image: z
+  file: z
     .any()
     .refine((file) => {
       return file?.size <= MAX_FILE_SIZE;

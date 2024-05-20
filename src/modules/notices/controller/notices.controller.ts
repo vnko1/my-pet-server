@@ -50,18 +50,18 @@ export class NoticesController {
   @UseGuards(AuthGuard)
   @Post()
   @UseInterceptors(
-    FileInterceptor('image', {
+    FileInterceptor('file', {
       storage: diskStorage(multerStorageConfig),
     }),
   )
   async addNotice(
     @Req() req: IUserId,
-    @UploadedFile() image: Express.Multer.File,
+    @UploadedFile() file: Express.Multer.File,
     @Body() createNoticeDto: CreateNoticeDto,
   ) {
     const parsedSchema = createNoticeSchema.safeParse({
       ...createNoticeDto,
-      image,
+      file,
     });
     console.log(parsedSchema.error.errors[0]);
     if (!parsedSchema.success)

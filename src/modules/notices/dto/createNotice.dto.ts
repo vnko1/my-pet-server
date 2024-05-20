@@ -27,7 +27,7 @@ export const createNoticeSchema = z
       .string({ required_error: 'Location is required' })
       .min(2, 'Location must contain min 2 symbols'),
     price: z.coerce.number().positive('Invalid price').optional(),
-    image: z
+    file: z
       .any()
       .refine((file) => {
         return file?.size <= MAX_FILE_SIZE;

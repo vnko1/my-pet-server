@@ -24,10 +24,10 @@ export class UsersService extends AppService {
     updateUserDto: UpdateUserDto,
     { projection = '', newDoc = true }: Partial<UpdateOptions> = {},
   ) {
-    const { avatar, ...userData } = updateUserDto;
+    const { file, ...userData } = updateUserDto;
     const user: Partial<User> = { ...userData };
-    if (avatar) {
-      const res = await this.saveAvatar(avatar.path, userId);
+    if (file) {
+      const res = await this.saveAvatar(file.path, userId);
       user.avatarUrl = res.eager[0].secure_url;
     }
     return this.userModel

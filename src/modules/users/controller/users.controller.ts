@@ -35,18 +35,18 @@ export class UserController {
   @UseGuards(AuthGuard)
   @Put()
   @UseInterceptors(
-    FileInterceptor('avatar', {
+    FileInterceptor('file', {
       storage: diskStorage(multerStorageConfig),
     }),
   )
   async updateProfile(
     @Req() req: IUserId,
-    @UploadedFile() avatar: Express.Multer.File,
+    @UploadedFile() file: Express.Multer.File,
     @Body() updateUserDto: UpdateUserDto,
   ) {
     const parsedSchema = updateUserSchema.safeParse({
       ...updateUserDto,
-      avatar,
+      file,
     });
 
     if (!parsedSchema.success)
