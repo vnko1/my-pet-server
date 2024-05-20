@@ -10,11 +10,7 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { Response } from 'express';
-
-import {
-  CreateUserDto,
-  createUserSchema,
-} from 'src/modules/users/dto/createUser.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 import {
   AuthGuard,
@@ -22,6 +18,10 @@ import {
   ZodValidationPipe,
 } from 'src/common';
 import { IUserId } from 'src/types';
+import {
+  CreateUserDto,
+  createUserSchema,
+} from 'src/modules/users/dto/createUser.dto';
 
 import { AuthService } from '../service/auth.service';
 import { SignInDto, signInSchema } from '../dto/signIn.dto';
@@ -29,6 +29,7 @@ import { RTokenGuard } from '../guard/rToken.guard';
 
 type Cred = { access_token: string; refresh_token: string };
 
+@ApiTags('auth')
 @Controller('auth')
 @UseFilters(MongooseExceptionFilter)
 export class AuthController {
