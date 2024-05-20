@@ -42,7 +42,7 @@ export class NoticesController {
   @UseGuards(AuthGuard)
   @Post('favorites/:id')
   async addToFavorites(@Req() req: IUserId, @Param('id') id: string) {
-    await this.noticesService.addToFavorite(id, req.user.id);
+    return await this.noticesService.addToFavorite(id, req.user.id);
   }
 
   // @UseGuards(AuthGuard)
