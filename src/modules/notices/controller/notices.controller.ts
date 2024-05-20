@@ -50,6 +50,7 @@ export class NoticesController {
   @UseGuards(AuthGuard)
   @Get('favorites')
   async getFavorites(@Req() req: IUserId, @Query() query: NoticesQueryDto) {
+    console.log('🚀 ~ NoticesController ~ getFavorites ~ query:', query);
     return await this.noticesService.getFavorites(req.user.id, query);
   }
 
