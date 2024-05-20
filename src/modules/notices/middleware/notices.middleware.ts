@@ -12,8 +12,19 @@ export class NoticesMiddleware extends AppService implements NestMiddleware {
   ) {
     super();
   }
-  use(req: Request, res: Response, next: NextFunction) {
-    console.log('Request...');
-    next();
+  async use(req: Request, _: Response, next: NextFunction) {
+    try {
+      const token = this.extractTokenFromHeader(req);
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: process.env.JWT_SECRET,
+      });
+
+      const user = await this.userService.findUserById(payload.sub);
+
+      req['user'] = user;
+      next();
+    } catch (e) {
+      next();
+    }
   }
 }
