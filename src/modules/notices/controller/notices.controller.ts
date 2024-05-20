@@ -45,13 +45,15 @@ export class NoticesController {
     return await this.noticesService.addToFavorite(id, req.user.id);
   }
 
-  // @UseGuards(AuthGuard)
-  // @Get('favorites')
-  // async getFavorites(@Req() req: IUserId) {}
+  @UseGuards(AuthGuard)
+  @Get('favorites')
+  async getFavorites(@Req() req: IUserId) {}
 
-  // @UseGuards(AuthGuard)
-  // @Delete('favorites')
-  // async removeFromFavorites(@Req() req: IUserId) {}
+  @UseGuards(AuthGuard)
+  @Delete('favorites/:id')
+  async removeFromFavorites(@Req() req: IUserId, @Param('id') id: string) {
+    return await this.noticesService.removeFromFavorite(id, req.user.id);
+  }
 
   @UseGuards(AuthGuard)
   @Post()

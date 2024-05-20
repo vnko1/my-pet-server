@@ -45,9 +45,27 @@ export class NoticesService extends AppService {
   }
 
   async addToFavorite(noticeId: string, userId: string) {
-    return this.noticeModel.findByIdAndUpdate(noticeId, {
-      $addToSet: { favorites: userId },
-    });
+    return this.noticeModel.findByIdAndUpdate(
+      noticeId,
+      {
+        $addToSet: { favorites: userId },
+      },
+      { new: true },
+    );
+  }
+
+  async removeFromFavorite(noticeId: string, userId: string) {
+    return this.noticeModel.findByIdAndUpdate(
+      noticeId,
+      {
+        $pull: { favorites: userId },
+      },
+      { new: true },
+    );
+  }
+
+  async getFavorites(userId: string) {
+    return this.noticeModel.find();
   }
 
   async getNotice(id: string) {
