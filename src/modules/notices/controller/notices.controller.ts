@@ -29,10 +29,10 @@ import { NoticesService } from '../service/notices.service';
 export class NoticesController {
   constructor(private noticesService: NoticesService) {}
 
-  @Get()
-  async getAllNotices(@Req() req: Partial<IUserId>) {
-    return req?.user?.id;
-  }
+  // @Get()
+  // async getAllNotices(@Req() req: Partial<IUserId>) {
+  //   return req?.user?.id;
+  // }
 
   @Get('notice/:id')
   async getNotice(@Param('id') id: string) {
@@ -40,16 +40,18 @@ export class NoticesController {
   }
 
   @UseGuards(AuthGuard)
-  @Post('favorites')
-  async addToFavorites(@Req() req: IUserId) {}
+  @Post('favorites/:id')
+  async addToFavorites(@Req() req: IUserId, @Param('id') id: string) {
+    await this.noticesService.addToFavorite(id, req.user.id);
+  }
 
-  @UseGuards(AuthGuard)
-  @Get('favorites')
-  async getFavorites(@Req() req: IUserId) {}
+  // @UseGuards(AuthGuard)
+  // @Get('favorites')
+  // async getFavorites(@Req() req: IUserId) {}
 
-  @UseGuards(AuthGuard)
-  @Delete('favorites')
-  async removeFromFavorites(@Req() req: IUserId) {}
+  // @UseGuards(AuthGuard)
+  // @Delete('favorites')
+  // async removeFromFavorites(@Req() req: IUserId) {}
 
   @UseGuards(AuthGuard)
   @Post()

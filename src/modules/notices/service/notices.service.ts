@@ -44,6 +44,12 @@ export class NoticesService extends AppService {
     return this.noticeModel.create(notice);
   }
 
+  async addToFavorite(noticeId: string, userId: string) {
+    return this.noticeModel.findByIdAndUpdate(noticeId, {
+      $addToSet: { favorites: userId },
+    });
+  }
+
   async getNotice(id: string) {
     const res = await this.noticeModel.findById(id);
     if (!res) throw new NotFoundException(`Notice with id: ${id} not exists`);
