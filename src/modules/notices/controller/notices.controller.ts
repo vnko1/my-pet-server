@@ -86,7 +86,6 @@ export class NoticesController {
   @HttpCode(204)
   async deleteNotice(@Param('id') id: string) {
     if (!isValidObjectId(id)) throw new BadRequestException();
-
     await this.noticesService.deleteNotice(id);
   }
 }
