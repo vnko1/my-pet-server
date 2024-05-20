@@ -15,9 +15,11 @@ import { diskStorage } from 'multer';
 
 import { AuthGuard, MongooseExceptionFilter } from 'src/common';
 import { multerStorageConfig } from 'src/utils';
+import { IUserId } from 'src/types';
 
 import { UpdateUserDto, updateUserSchema } from '../dto/updateUser.dto';
 import { UsersService } from '../service/users.service';
+import { User } from '../schema/users.schema';
 
 @Controller('profile')
 @UseFilters(MongooseExceptionFilter)
@@ -26,7 +28,7 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @Get()
-  getProfile(@Req() req) {
+  getProfile(@Req() req: { user: User }) {
     return req.user;
   }
 
@@ -38,7 +40,7 @@ export class UserController {
     }),
   )
   async updateProfile(
-    @Req() req,
+    @Req() req: IUserId,
     @UploadedFile() avatar: Express.Multer.File,
     @Body() updateUserDto: UpdateUserDto,
   ) {
