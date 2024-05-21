@@ -14,6 +14,7 @@ import {
   Get,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiTags } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
 import { isValidObjectId } from 'mongoose';
 
@@ -24,6 +25,7 @@ import { IUserId } from 'src/types';
 import { PetsService } from '../service/pets.service';
 import { CreatePetDto, createPetSchema } from '../dto/createPet.dto';
 
+@ApiTags('pets')
 @Controller('pets')
 @UseGuards(AuthGuard)
 @UseFilters(MongooseExceptionFilter)

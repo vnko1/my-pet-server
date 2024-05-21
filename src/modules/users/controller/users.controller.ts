@@ -10,6 +10,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 
@@ -21,6 +22,7 @@ import { UpdateUserDto, updateUserSchema } from '../dto/updateUser.dto';
 import { UsersService } from '../service/users.service';
 import { User } from '../schema/users.schema';
 
+@ApiTags('profile')
 @Controller('profile')
 @UseFilters(MongooseExceptionFilter)
 export class UserController {

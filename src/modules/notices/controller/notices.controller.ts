@@ -15,6 +15,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiTags } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
 import { isValidObjectId } from 'mongoose';
 
@@ -26,6 +27,7 @@ import { CreateNoticeDto, createNoticeSchema } from '../dto/createNotice.dto';
 import { NoticesService } from '../service/notices.service';
 import { NoticesQueryDto } from '../dto/noticesQueryDto.dto';
 
+@ApiTags('notices')
 @Controller('notices')
 @UseFilters(MongooseExceptionFilter)
 export class NoticesController {
