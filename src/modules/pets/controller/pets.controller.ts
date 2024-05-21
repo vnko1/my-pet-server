@@ -64,6 +64,6 @@ export class PetsController {
   @HttpCode(204)
   async deletePet(@Param('id') id: string) {
     if (!isValidObjectId(id)) throw new BadRequestException();
-    await this.petService.deletePet(id);
+    return await this.petService.deletePet(id);
   }
 }
