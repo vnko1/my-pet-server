@@ -102,9 +102,8 @@ export class NoticesController {
 
   @UseGuards(AuthGuard)
   @Delete('notice/:id')
-  @HttpCode(204)
   async deleteNotice(@Param('id') id: string) {
     if (!isValidObjectId(id)) throw new BadRequestException();
-    await this.noticesService.deleteNotice(id);
+    return await this.noticesService.deleteNotice(id);
   }
 }
