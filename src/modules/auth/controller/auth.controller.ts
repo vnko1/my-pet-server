@@ -85,7 +85,7 @@ export class AuthController {
       httpOnly: true,
       secure: true,
       maxAge: -1,
-      sameSite: 'lax',
+      sameSite: 'none',
     });
     return res.send();
   }
@@ -94,7 +94,7 @@ export class AuthController {
     res.cookie('refresh_token', cred.refresh_token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'lax',
+      sameSite: 'none',
       maxAge,
     });
     return res;
