@@ -34,7 +34,7 @@ export class AuthService extends AppService {
     const payload = {
       sub: user.id,
     };
-    return await this.createCred(payload);
+    return { cred: await this.createCred(payload), user };
   }
 
   async createCred(payload: Payload) {

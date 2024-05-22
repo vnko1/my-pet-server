@@ -45,11 +45,15 @@ export class AuthController {
   @HttpCode(200)
   @UsePipes(new ZodValidationPipe(signInSchema))
   async signIn(@Body() signInDto: SignInDto, @Res() res: Response) {
-    const cred = await this.authService.signIn(
+    const { cred, user } = await this.authService.signIn(
       signInDto.email,
       signInDto.password,
     );
-    return this.genResponse(res, cred, +process.env.REFRESH_TOKEN_AGE);
+    return this.genCookieResponse(
+      res,
+      cred,
+      +process.env.REFRESH_TOKEN_AGE,
+    ).send({ access_token: cred.access_token, data: user });
   }
 
   @UseGuards(RTokenGuard)
@@ -58,7 +62,11 @@ export class AuthController {
   async refreshAToken(@Req() req: IUserId, @Res() res: Response) {
     const cred = await this.authService.createCred({ sub: req.user.id });
 
-    return this.genResponse(res, cred, +process.env.REFRESH_TOKEN_AGE);
+    return this.genCookieResponse(
+      res,
+      cred,
+      +process.env.REFRESH_TOKEN_AGE,
+    ).send({ access_token: cred.access_token });
   }
 
   @UseGuards(AuthGuard)
@@ -74,13 +82,13 @@ export class AuthController {
     return res.send();
   }
 
-  private genResponse(res: Response, cred: Cred, maxAge: number) {
+  private genCookieResponse(res: Response, cred: Cred, maxAge: number) {
     res.cookie('refresh_token', cred.refresh_token, {
       httpOnly: true,
       secure: true,
       sameSite: 'lax',
       maxAge,
     });
-    return res.send({ access_token: cred.access_token });
+    return res;
   }
 }
