@@ -53,7 +53,15 @@ export class AuthController {
       res,
       cred,
       +process.env.REFRESH_TOKEN_AGE,
-    ).send({ access_token: cred.access_token, data: user });
+    ).send({
+      access_token: cred.access_token,
+      data: {
+        name: user.name,
+        avatarUrl: user.avatarUrl,
+        email: user.email,
+        _id: user._id,
+      },
+    });
   }
 
   @UseGuards(RTokenGuard)
