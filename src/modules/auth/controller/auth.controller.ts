@@ -38,7 +38,7 @@ export class AuthController {
   @Post('register')
   @UsePipes(new ZodValidationPipe(createUserSchema))
   async createUser(@Body() createUserDto: CreateUserDto) {
-    await this.authService.signUp(createUserDto);
+    return await this.authService.signUp(createUserDto);
   }
 
   @Post('login')
