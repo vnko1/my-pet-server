@@ -7,6 +7,16 @@ import { AppHttpExceptionFilter } from './common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser());
+  app.enableCors({
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'https://your-pet-server-bolc.onrender.com',
+    ],
+    methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH'],
+    credentials: true,
+  });
+
   app.useGlobalFilters(new AppHttpExceptionFilter());
   const config = new DocumentBuilder()
     .setTitle('Your pet api')
